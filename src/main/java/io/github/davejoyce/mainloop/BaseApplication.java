@@ -24,8 +24,6 @@ public class BaseApplication implements Application {
                names = {"-s", "--signal"})
     private String exitSignal = "INT";
 
-    private volatile boolean running;
-
     public static void main(String[] args) {
         BaseApplication application = new BaseApplication();
         JCommander jc = JCommander.newBuilder()
@@ -50,7 +48,6 @@ public class BaseApplication implements Application {
 
     public BaseApplication(Thread mainThread) {
         this.mainThread = requireNonNull(mainThread, "Main thread argument cannot be null");
-        this.running = true;
         this.lock = new ReentrantLock();
         this.shuttingDown = lock.newCondition();
 
@@ -80,8 +77,12 @@ public class BaseApplication implements Application {
 
     public void stop() {
         logger.info("Stopping {}...", programName());
-        running = false;
-        this.notify();
+        lock.lock();
+        try {
+            shuttingDown.signal();
+        } finally {
+            lock.unlock();
+        }
     }
 
     private static Application getApplicationClass(String className) {
