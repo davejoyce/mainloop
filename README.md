@@ -1,2 +1,2 @@
 # mainloop
-Playing around with application main loops in Java
+Playing around with daemon main loops in Java

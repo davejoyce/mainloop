@@ -9,7 +9,7 @@
     <version>1.0.0-SNAPSHOT</version>
 
     <name>Main Loop Playground</name>
-    <description>Playing around with application main loops in Java</description>
+    <description>Playing around with daemon main loops in Java</description>
 
     <licenses>
         <license>
